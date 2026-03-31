@@ -78,7 +78,7 @@ namespace CybersecurityChatbot
             Console.WriteLine();
         }
 
-        
+
         public static void ShowLoadingAnimation(string text, int durationSeconds = 2)
         {
             Console.Write(text);
@@ -88,6 +88,12 @@ namespace CybersecurityChatbot
                 Console.Write(".");
             }
             Console.WriteLine();
+        }
+        public static void ShowSeparator()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine(new string('─', 70));
+            Console.ResetColor();
         }
     }
 }
