@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Author: ST10467183 - PROG6221 POE Part 1
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
