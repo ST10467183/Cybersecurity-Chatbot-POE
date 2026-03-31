@@ -19,7 +19,7 @@ namespace CybersecurityChatbot
             PlayVoiceGreeting();
 
             // Art
-            Ul.DisplayHeader();
+            UI.DisplayHeader();
 
             // instance
             Chatbot bot = new Chatbot();
@@ -39,8 +39,8 @@ namespace CybersecurityChatbot
             bot.SetUserName(name);
 
             // Welcome
-            Ul.DisplayResponse($"Welcome, {bot.GetUserName()}! I'm your Cybersecurity Awareness Assistant. I'm here to help you stay safe online!");
-            Ul.DisplayResponse("You can ask me about password safety, phishing scams, or safe browsing. Type 'exit' to quit.");
+            UI.DisplayResponse($"Welcome, {bot.GetUserName()}! I'm your Cybersecurity Awareness Assistant. I'm here to help you stay safe online!");
+            UI.DisplayResponse("You can ask me about password safety, phishing scams, or safe browsing. Type 'exit' to quit.");
 
             // Main Loop
             while (true)
@@ -52,13 +52,13 @@ namespace CybersecurityChatbot
                 // Check exit
                 if (userInput != null && userInput.ToLower() == "exit")
                 {
-                    Ul.DisplayResponse($"Goodbye, {bot.GetUserName()}! Stay safe online! 🛡️");
+                    UI.DisplayResponse($"Goodbye, {bot.GetUserName()}! Stay safe online! 🛡️");
                     break;
                 }
 
                 //get response/display
                 string response = bot.GetResponse(userInput);
-                Ul.DisplayResponse(response);
+                UI.DisplayResponse(response);
             }
 
             // Pause to read

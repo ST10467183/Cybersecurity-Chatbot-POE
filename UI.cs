@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CybersecurityChatbot
 {
-    internal class Ul
+    internal class UI
     {
         // Art
         public static void DisplayHeader()
