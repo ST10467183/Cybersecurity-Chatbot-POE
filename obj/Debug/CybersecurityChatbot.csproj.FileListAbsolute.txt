@@ -1,0 +1,8 @@
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\obj\Debug\CybersecurityChatbot.csproj.AssemblyReference.cache
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\obj\Debug\CybersecurityChatbot.csproj.CoreCompileInputs.cache
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\bin\Debug\Audio\Recording.wav
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\bin\Debug\CybersecurityChatbot.exe.config
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\bin\Debug\CybersecurityChatbot.exe
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\bin\Debug\CybersecurityChatbot.pdb
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\obj\Debug\CybersecurityChatbot.exe
+C:\Users\GOKUS\OneDrive\Documents\ProgPoe\CybersecurityChatbot\obj\Debug\CybersecurityChatbot.pdb
