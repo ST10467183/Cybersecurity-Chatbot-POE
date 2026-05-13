@@ -11,6 +11,10 @@ namespace CybersecurityChatbot
         private string userName;
         private Random random = new Random();
 
+        // Conversation flow tracking
+        private string lastTopic = "";
+        private int lastTipIndex = -1;
+
         // Password Tips
         private List<string> passwordTips = new List<string>
         {
@@ -70,7 +74,7 @@ namespace CybersecurityChatbot
         {
         }
 
-        public string GetResponse(string userInput, string lastTopic)
+        public string GetResponse(string userInput, string lastTopicParam)
         {
             if (string.IsNullOrWhiteSpace(userInput))
             {
@@ -79,29 +83,41 @@ namespace CybersecurityChatbot
 
             string lowerInput = userInput.ToLower();
 
-            //  RANDOM tip 
+            // Conversation flow - tell me more
+            if (lowerInput.Contains("tell me more") || lowerInput.Contains("another tip") || lowerInput.Contains("another one") || lowerInput.Contains("more tips"))
+            {
+                return GetMoreOnLastTopic();
+            }
+
+            // Random tip 
             if (lowerInput.Contains("password"))
             {
+                lastTopic = "password";
                 return GetRandomPasswordTip();
             }
             if (lowerInput.Contains("phishing"))
             {
+                lastTopic = "phishing";
                 return GetRandomPhishingTip();
             }
             if (lowerInput.Contains("scam"))
             {
+                lastTopic = "scam";
                 return GetRandomScamTip();
             }
             if (lowerInput.Contains("privacy"))
             {
+                lastTopic = "privacy";
                 return GetRandomPrivacyTip();
             }
             if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
             {
+                lastTopic = "safe browsing";
                 return GetRandomSafeBrowsingTip();
             }
             if (lowerInput.Contains("2fa") || lowerInput.Contains("two factor"))
             {
+                lastTopic = "2fa";
                 return "TWO-FACTOR AUTHENTICATION:\n- Adds an extra layer of security\n- Requires a code from your phone\n- Works even if someone steals your password\n- Available on most major accounts\n- Always enable it when offered";
             }
             if (lowerInput.Contains("how are you"))
@@ -118,6 +134,27 @@ namespace CybersecurityChatbot
             }
 
             return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Password safety\n- Phishing scams\n- Safe browsing\n- Privacy protection\n- Two-factor authentication";
+        }
+
+        private string GetMoreOnLastTopic()
+        {
+            switch (lastTopic)
+            {
+                case "password":
+                    return GetRandomPasswordTip();
+                case "phishing":
+                    return GetRandomPhishingTip();
+                case "scam":
+                    return GetRandomScamTip();
+                case "privacy":
+                    return GetRandomPrivacyTip();
+                case "safe browsing":
+                    return GetRandomSafeBrowsingTip();
+                case "2fa":
+                    return "TWO-FACTOR AUTHENTICATION:\n- Adds an extra layer of security\n- Requires a code from your phone\n- Works even if someone steals your password\n- Available on most major accounts\n- Always enable it when offered";
+                default:
+                    return "I don't have a topic to continue. Try asking me about passwords, phishing, scams, privacy, or safe browsing first!";
+            }
         }
 
         private string GetRandomPasswordTip()

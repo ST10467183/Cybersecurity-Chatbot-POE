@@ -1,4 +1,4 @@
-﻿// Author: ST10467183 - PROG6221 POE Part 1
+﻿// Author: ST10467183 - PROG6221 POE 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace CybersecurityChatbot
             // instance
             Chatbot bot = new Chatbot();
 
-            // Name?
+            // Name
             Console.Write("\n[Bot]: Hello! What's your name? ");
             string name = Console.ReadLine();
 
@@ -36,7 +36,7 @@ namespace CybersecurityChatbot
                 name = Console.ReadLine();
             }
 
-            // Steal data(store name)
+            // Steal data
             bot.SetUserName(name);
 
             // Welcome
@@ -57,7 +57,7 @@ namespace CybersecurityChatbot
                     break;
                 }
 
-                //get response/display
+                //get response
                 string response = bot.GetResponse(userInput);
                 UI.DisplayResponse(response);
             }
@@ -67,18 +67,18 @@ namespace CybersecurityChatbot
             Console.ReadKey();
         }
 
-        // Pay recording
+        // Play recording
         static void PlayVoiceGreeting()
         {
             try
             {
                 // sound player
                 SoundPlayer player = new SoundPlayer("Audio/greeting.wav");
-                player.Play(); // Plays asynchronously (doesn't block)
+                player.Play();
             }
             catch (Exception)
             {
-                // problem with file
+                // problem 
                 Console.WriteLine("Note: Voice greeting not available. Continuing with text only.");
             }
         }
