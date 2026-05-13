@@ -12,7 +12,7 @@ namespace CybersecurityChatbot
         private string userInterest = "";
         private bool waitingForYesNo = false;
         private string pendingTopic = "";
-        private Random random = new Random();
+        private readonly Random random = new Random();
 
         // Flow tracking
         private string lastTopic = "";
@@ -24,7 +24,7 @@ namespace CybersecurityChatbot
         private List<string> frustratedWords = new List<string> { "frustrated", "annoying", "confusing", "difficult", "hard", "stupid" };
 
         // Password tips
-        private List<string> passwordTips = new List<string>
+        private static readonly List<string> passwordTips = new List<string>
         {
             "Use at least 12 characters with a mix of uppercase, lowercase, numbers, and symbols.",
             "Never reuse passwords across different accounts.",
@@ -35,7 +35,7 @@ namespace CybersecurityChatbot
         };
 
         // Phishing tips
-        private List<string> phishingTips = new List<string>
+        private static readonly List<string> phishingTips = new List<string>
         {
             "Never click on links in suspicious emails.",
             "Legitimate companies never ask for your password via email.",
@@ -46,7 +46,7 @@ namespace CybersecurityChatbot
         };
 
         // Scam tips
-        private List<string> scamTips = new List<string>
+        private static readonly List<string> scamTips = new List<string>
         {
             "If something sounds too good to be true, it probably is.",
             "Never send money to someone you've only met online.",
@@ -57,7 +57,7 @@ namespace CybersecurityChatbot
         };
 
         // Privacy tips
-        private List<string> privacyTips = new List<string>
+        private static readonly List<string> privacyTips = new List<string>
         {
             "Review app permissions regularly.",
             "Use a VPN on public WiFi networks.",
@@ -68,7 +68,7 @@ namespace CybersecurityChatbot
         };
 
         // Browsing tips
-        private List<string> safeBrowsingTips = new List<string>
+        private static readonly List<string> safeBrowsingTips = new List<string>
         {
             "Always look for 'https://' in URLs.",
             "Avoid using public WiFi for banking or shopping.",
