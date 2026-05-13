@@ -306,6 +306,25 @@ namespace CybersecurityChatbot
                 return sentimentPrefix + "You can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)\n\nJust type your question and I'll help you out!";
             }
 
+            // Did you mean
+            if (lowerInput.Contains("pass") || lowerInput.Contains("word"))
+                return "Did you mean to ask about passwords? Try typing 'password'.";
+
+            if (lowerInput.Contains("fish") || lowerInput.Contains("phish"))
+                return "Did you mean to ask about phishing? Try typing 'phishing'.";
+
+            if (lowerInput.Contains("scare") || lowerInput.Contains("scamming") || lowerInput.Contains("scammed"))
+                return "Did you mean to ask about scams? Try typing 'scam'.";
+
+            if (lowerInput.Contains("private") || lowerInput.Contains("personal") || lowerInput.Contains("data"))
+                return "Did you mean to ask about privacy? Try typing 'privacy'.";
+
+            if (lowerInput.Contains("browse") || lowerInput.Contains("surf") || lowerInput.Contains("web"))
+                return "Did you mean to ask about safe browsing? Try typing 'safe browsing'.";
+
+            if (lowerInput.Contains("two") || lowerInput.Contains("factor") || lowerInput.Contains("authentication"))
+                return "Did you mean to ask about two-factor authentication? Try typing '2fa'.";
+
             return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
         }
 
