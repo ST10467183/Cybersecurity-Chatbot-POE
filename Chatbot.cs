@@ -306,7 +306,7 @@ namespace CybersecurityChatbot
                 return sentimentPrefix + "You can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)\n\nJust type your question and I'll help you out!";
             }
 
-            // Did you mean
+            // Did you mean?
             if (lowerInput.Contains("pass") || lowerInput.Contains("word"))
                 return "Did you mean to ask about passwords? Try typing 'password'.";
 
