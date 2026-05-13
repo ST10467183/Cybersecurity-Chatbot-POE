@@ -18,6 +18,11 @@ namespace CybersecurityChatbot
         private string lastTopic = "";
         private int lastTipIndex = -1;
 
+        // Sentiment
+        private List<string> worriedWords = new List<string> { "worried", "scared", "nervous", "anxious", "concerned", "afraid" };
+        private List<string> curiousWords = new List<string> { "curious", "interesting", "fascinating", "tell me more", "want to learn" };
+        private List<string> frustratedWords = new List<string> { "frustrated", "annoying", "confusing", "difficult", "hard", "stupid" };
+
         // Password tips
         private List<string> passwordTips = new List<string>
         {
@@ -77,14 +82,47 @@ namespace CybersecurityChatbot
         {
         }
 
+        private string DetectSentiment(string input)
+        {
+            foreach (string word in worriedWords)
+            {
+                if (input.Contains(word))
+                    return "worried";
+            }
+            foreach (string word in curiousWords)
+            {
+                if (input.Contains(word))
+                    return "curious";
+            }
+            foreach (string word in frustratedWords)
+            {
+                if (input.Contains(word))
+                    return "frustrated";
+            }
+            return "";
+        }
+
+        private string GetSentimentPrefix(string sentiment)
+        {
+            if (sentiment == "worried")
+                return "It's normal to feel worried. Let me help you.\n\n";
+            if (sentiment == "curious")
+                return "Great that you're curious! Here's something for you.\n\n";
+            if (sentiment == "frustrated")
+                return "I understand the frustration. Let me simplify.\n\n";
+            return "";
+        }
+
         public string GetResponse(string userInput, string lastTopicParam)
         {
             if (string.IsNullOrWhiteSpace(userInput))
             {
-                return "I didn't catch that. Could you please say something?\n\nTry asking about:\n- Password safety\n- Phishing awareness\n- Safe browsing\n- Scam prevention\n- Privacy protection";
+                return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
             }
 
             string lowerInput = userInput.ToLower();
+            string sentiment = DetectSentiment(lowerInput);
+            string sentimentPrefix = GetSentimentPrefix(sentiment);
 
             // Handle yes/no responses
             if (waitingForYesNo)
@@ -112,7 +150,7 @@ namespace CybersecurityChatbot
                             break;
                     }
                     waitingForYesNo = true;
-                    return tip + "\n\nWould you like another tip?";
+                    return sentimentPrefix + tip + "\n\nWould you like another tip?";
                 }
                 else if (lowerInput.Contains("no") || lowerInput.Contains("nope") || lowerInput.Contains("not") || lowerInput.Contains("nah"))
                 {
@@ -134,35 +172,35 @@ namespace CybersecurityChatbot
                     userInterest = "password";
                     pendingTopic = "password";
                     waitingForYesNo = true;
-                    return $"Great! I'll remember that you're interested in password safety.\n\n{GetRandomPasswordTip()}\n\nSince you're interested in passwords, would you like another tip?";
+                    return sentimentPrefix + $"Great! I'll remember that you're interested in password safety.\n\n{GetRandomPasswordTip()}\n\nSince you're interested in passwords, would you like another tip?";
                 }
                 if (lowerInput.Contains("phishing"))
                 {
                     userInterest = "phishing";
                     pendingTopic = "phishing";
                     waitingForYesNo = true;
-                    return $"Great! I'll remember that you're interested in phishing awareness.\n\n{GetRandomPhishingTip()}\n\nSince you're interested in phishing, would you like another tip?";
+                    return sentimentPrefix + $"Great! I'll remember that you're interested in phishing awareness.\n\n{GetRandomPhishingTip()}\n\nSince you're interested in phishing, would you like another tip?";
                 }
                 if (lowerInput.Contains("privacy"))
                 {
                     userInterest = "privacy";
                     pendingTopic = "privacy";
                     waitingForYesNo = true;
-                    return $"Great! I'll remember that you're interested in privacy.\n\n{GetRandomPrivacyTip()}\n\nSince you're interested in privacy, would you like another tip?";
+                    return sentimentPrefix + $"Great! I'll remember that you're interested in privacy.\n\n{GetRandomPrivacyTip()}\n\nSince you're interested in privacy, would you like another tip?";
                 }
                 if (lowerInput.Contains("scam"))
                 {
                     userInterest = "scam";
                     pendingTopic = "scam";
                     waitingForYesNo = true;
-                    return $"Great! I'll remember that you're interested in scam prevention.\n\n{GetRandomScamTip()}\n\nSince you're interested in scams, would you like another tip?";
+                    return sentimentPrefix + $"Great! I'll remember that you're interested in scam prevention.\n\n{GetRandomScamTip()}\n\nSince you're interested in scams, would you like another tip?";
                 }
                 if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
                 {
                     userInterest = "safe browsing";
                     pendingTopic = "safe browsing";
                     waitingForYesNo = true;
-                    return $"Great! I'll remember that you're interested in safe browsing.\n\n{GetRandomSafeBrowsingTip()}\n\nSince you're interested in safe browsing, would you like another tip?";
+                    return sentimentPrefix + $"Great! I'll remember that you're interested in safe browsing.\n\n{GetRandomSafeBrowsingTip()}\n\nSince you're interested in safe browsing, would you like another tip?";
                 }
             }
 
@@ -186,7 +224,7 @@ namespace CybersecurityChatbot
             // tips
             if (lowerInput.Contains("tell me more") || lowerInput.Contains("another tip") || lowerInput.Contains("another one") || lowerInput.Contains("more tips"))
             {
-                return GetMoreOnLastTopic();
+                return sentimentPrefix + GetMoreOnLastTopic();
             }
 
             // Keywords
@@ -200,7 +238,7 @@ namespace CybersecurityChatbot
                     waitingForYesNo = true;
                     tip = tip + "\n\nWould you like another tip?";
                 }
-                return tip;
+                return sentimentPrefix + tip;
             }
             if (lowerInput.Contains("phishing"))
             {
@@ -212,7 +250,7 @@ namespace CybersecurityChatbot
                     waitingForYesNo = true;
                     tip = tip + "\n\nWould you like another tip?";
                 }
-                return tip;
+                return sentimentPrefix + tip;
             }
             if (lowerInput.Contains("scam"))
             {
@@ -224,7 +262,7 @@ namespace CybersecurityChatbot
                     waitingForYesNo = true;
                     tip = tip + "\n\nWould you like another tip?";
                 }
-                return tip;
+                return sentimentPrefix + tip;
             }
             if (lowerInput.Contains("privacy"))
             {
@@ -236,7 +274,7 @@ namespace CybersecurityChatbot
                     waitingForYesNo = true;
                     tip = tip + "\n\nWould you like another tip?";
                 }
-                return tip;
+                return sentimentPrefix + tip;
             }
             if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
             {
@@ -248,27 +286,27 @@ namespace CybersecurityChatbot
                     waitingForYesNo = true;
                     tip = tip + "\n\nWould you like another tip?";
                 }
-                return tip;
+                return sentimentPrefix + tip;
             }
             if (lowerInput.Contains("2fa") || lowerInput.Contains("two factor"))
             {
                 lastTopic = "2fa";
-                return "TWO-FACTOR AUTHENTICATION:\n- Adds an extra layer of security\n- Requires a code from your phone\n- Works even if someone steals your password\n- Available on most major accounts\n- Always enable it when offered";
+                return sentimentPrefix + "TWO-FACTOR AUTHENTICATION:\n- Adds an extra layer of security\n- Requires a code from your phone\n- Works even if someone steals your password\n- Available on most major accounts\n- Always enable it when offered";
             }
             if (lowerInput.Contains("how are you"))
             {
-                return "I'm doing great! Thanks for asking! I'm ready to help you stay safe online.";
+                return sentimentPrefix + "I'm doing great! Thanks for asking! I'm ready to help you stay safe online.";
             }
             if (lowerInput.Contains("what is your purpose"))
             {
-                return "My purpose is to educate you about cybersecurity and help you protect yourself from:\n- Phishing attacks\n- Online scams\n- Weak passwords\n- Privacy breaches\n- Malware and viruses";
+                return sentimentPrefix + "My purpose is to educate you about cybersecurity and help you protect yourself from:\n- Phishing attacks\n- Online scams\n- Weak passwords\n- Privacy breaches\n- Malware and viruses";
             }
             if (lowerInput.Contains("what can i ask") || lowerInput.Contains("what can I ask"))
             {
-                return "You can ask me about:\n- Password safety\n- Phishing awareness\n- Safe browsing habits\n- Scam prevention\n- Privacy protection\n- Two-factor authentication (2FA)\n\nJust type your question and I'll help you out!";
+                return sentimentPrefix + "You can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)\n\nJust type your question and I'll help you out!";
             }
 
-            return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Password safety\n- Phishing scams\n- Safe browsing\n- Privacy protection\n- Two-factor authentication";
+            return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
         }
 
         private string GetMoreOnLastTopic()
