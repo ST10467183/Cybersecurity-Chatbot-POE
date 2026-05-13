@@ -9,13 +9,16 @@ namespace CybersecurityChatbot
     internal class Chatbot
     {
         private string userName;
+        private string userInterest = "";
+        private bool waitingForYesNo = false;
+        private string pendingTopic = "";
         private Random random = new Random();
 
-        // Conversation flow tracking
+        // Flow tracking
         private string lastTopic = "";
         private int lastTipIndex = -1;
 
-        // Password Tips
+        // Password tips
         private List<string> passwordTips = new List<string>
         {
             "Use at least 12 characters with a mix of uppercase, lowercase, numbers, and symbols.",
@@ -26,7 +29,7 @@ namespace CybersecurityChatbot
             "Change your passwords immediately if you suspect any account has been compromised."
         };
 
-        // Phishing Tips
+        // Phishing tips
         private List<string> phishingTips = new List<string>
         {
             "Never click on links in suspicious emails.",
@@ -37,7 +40,7 @@ namespace CybersecurityChatbot
             "Never download attachments from unknown senders."
         };
 
-        // Scam Tips
+        // Scam tips
         private List<string> scamTips = new List<string>
         {
             "If something sounds too good to be true, it probably is.",
@@ -48,7 +51,7 @@ namespace CybersecurityChatbot
             "Always verify charity requests before donating."
         };
 
-        // Privacy Tips
+        // Privacy tips
         private List<string> privacyTips = new List<string>
         {
             "Review app permissions regularly.",
@@ -59,7 +62,7 @@ namespace CybersecurityChatbot
             "Check if your email has been breached online."
         };
 
-        // Browsing Tips
+        // Browsing tips
         private List<string> safeBrowsingTips = new List<string>
         {
             "Always look for 'https://' in URLs.",
@@ -83,37 +86,169 @@ namespace CybersecurityChatbot
 
             string lowerInput = userInput.ToLower();
 
-            // Conversation flow - tell me more
+            // Handle yes/no responses
+            if (waitingForYesNo)
+            {
+                if (lowerInput.Contains("yes") || lowerInput.Contains("yeah") || lowerInput.Contains("sure") || lowerInput.Contains("ok") || lowerInput.Contains("yep"))
+                {
+                    waitingForYesNo = false;
+                    string tip = "";
+                    switch (pendingTopic)
+                    {
+                        case "password":
+                            tip = GetRandomPasswordTip();
+                            break;
+                        case "phishing":
+                            tip = GetRandomPhishingTip();
+                            break;
+                        case "scam":
+                            tip = GetRandomScamTip();
+                            break;
+                        case "privacy":
+                            tip = GetRandomPrivacyTip();
+                            break;
+                        case "safe browsing":
+                            tip = GetRandomSafeBrowsingTip();
+                            break;
+                    }
+                    waitingForYesNo = true;
+                    return tip + "\n\nWould you like another tip?";
+                }
+                else if (lowerInput.Contains("no") || lowerInput.Contains("nope") || lowerInput.Contains("not") || lowerInput.Contains("nah"))
+                {
+                    waitingForYesNo = false;
+                    pendingTopic = "";
+                    return "No problem!\n\nYou can ask me about:\n- Password safety\n- Phishing\n- Safe browsing\n- Scam\n- Privacy\n- Two-factor authentication (2FA)";
+                }
+                else
+                {
+                    return "I didn't catch that. Would you like another tip? Please say yes or no.";
+                }
+            }
+
+            // User interest
+            if (lowerInput.Contains("i am interested in") || lowerInput.Contains("i like") || lowerInput.Contains("my favorite topic is"))
+            {
+                if (lowerInput.Contains("password"))
+                {
+                    userInterest = "password";
+                    pendingTopic = "password";
+                    waitingForYesNo = true;
+                    return $"Great! I'll remember that you're interested in password safety.\n\n{GetRandomPasswordTip()}\n\nSince you're interested in passwords, would you like another tip?";
+                }
+                if (lowerInput.Contains("phishing"))
+                {
+                    userInterest = "phishing";
+                    pendingTopic = "phishing";
+                    waitingForYesNo = true;
+                    return $"Great! I'll remember that you're interested in phishing awareness.\n\n{GetRandomPhishingTip()}\n\nSince you're interested in phishing, would you like another tip?";
+                }
+                if (lowerInput.Contains("privacy"))
+                {
+                    userInterest = "privacy";
+                    pendingTopic = "privacy";
+                    waitingForYesNo = true;
+                    return $"Great! I'll remember that you're interested in privacy.\n\n{GetRandomPrivacyTip()}\n\nSince you're interested in privacy, would you like another tip?";
+                }
+                if (lowerInput.Contains("scam"))
+                {
+                    userInterest = "scam";
+                    pendingTopic = "scam";
+                    waitingForYesNo = true;
+                    return $"Great! I'll remember that you're interested in scam prevention.\n\n{GetRandomScamTip()}\n\nSince you're interested in scams, would you like another tip?";
+                }
+                if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
+                {
+                    userInterest = "safe browsing";
+                    pendingTopic = "safe browsing";
+                    waitingForYesNo = true;
+                    return $"Great! I'll remember that you're interested in safe browsing.\n\n{GetRandomSafeBrowsingTip()}\n\nSince you're interested in safe browsing, would you like another tip?";
+                }
+            }
+
+            // Recall info
+            if (lowerInput.Contains("what do you know about me") || lowerInput.Contains("what do you remember"))
+            {
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userInterest))
+                {
+                    return $"I know that your name is {userName} and you are interested in {userInterest} topics.";
+                }
+                else if (!string.IsNullOrEmpty(userName))
+                {
+                    return $"I know that your name is {userName}. You haven't told me your favorite topic yet.";
+                }
+                else
+                {
+                    return "I don't know much about you yet. Tell me your name and what you're interested in!";
+                }
+            }
+
+            // tips
             if (lowerInput.Contains("tell me more") || lowerInput.Contains("another tip") || lowerInput.Contains("another one") || lowerInput.Contains("more tips"))
             {
                 return GetMoreOnLastTopic();
             }
 
-            // Random tip 
+            // Keywords
             if (lowerInput.Contains("password"))
             {
                 lastTopic = "password";
-                return GetRandomPasswordTip();
+                string tip = GetRandomPasswordTip();
+                if (userInterest == "password")
+                {
+                    pendingTopic = "password";
+                    waitingForYesNo = true;
+                    tip = tip + "\n\nWould you like another tip?";
+                }
+                return tip;
             }
             if (lowerInput.Contains("phishing"))
             {
                 lastTopic = "phishing";
-                return GetRandomPhishingTip();
+                string tip = GetRandomPhishingTip();
+                if (userInterest == "phishing")
+                {
+                    pendingTopic = "phishing";
+                    waitingForYesNo = true;
+                    tip = tip + "\n\nWould you like another tip?";
+                }
+                return tip;
             }
             if (lowerInput.Contains("scam"))
             {
                 lastTopic = "scam";
-                return GetRandomScamTip();
+                string tip = GetRandomScamTip();
+                if (userInterest == "scam")
+                {
+                    pendingTopic = "scam";
+                    waitingForYesNo = true;
+                    tip = tip + "\n\nWould you like another tip?";
+                }
+                return tip;
             }
             if (lowerInput.Contains("privacy"))
             {
                 lastTopic = "privacy";
-                return GetRandomPrivacyTip();
+                string tip = GetRandomPrivacyTip();
+                if (userInterest == "privacy")
+                {
+                    pendingTopic = "privacy";
+                    waitingForYesNo = true;
+                    tip = tip + "\n\nWould you like another tip?";
+                }
+                return tip;
             }
             if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
             {
                 lastTopic = "safe browsing";
-                return GetRandomSafeBrowsingTip();
+                string tip = GetRandomSafeBrowsingTip();
+                if (userInterest == "safe browsing")
+                {
+                    pendingTopic = "safe browsing";
+                    waitingForYesNo = true;
+                    tip = tip + "\n\nWould you like another tip?";
+                }
+                return tip;
             }
             if (lowerInput.Contains("2fa") || lowerInput.Contains("two factor"))
             {
