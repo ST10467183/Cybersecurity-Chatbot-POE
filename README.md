@@ -19,13 +19,15 @@ A cybersecurity chatbot for PROG6221 POE - Part 1 (Console) and Part 2 (GUI).
   - Two-factor authentication (2FA)
 
 ## Part 2 Features (GUI)
-- WPF graphical user interface with dark purple theme
+- WPF graphical interface with dark purple theme
 - ASCII art header spelling "CYBERBOT"
-- Voice greeting on startup
-- Keyword recognition for cybersecurity topics
+- Keyword recognition for 6 cybersecurity topics
 - Random responses for passwords, phishing, scams, privacy, and safe browsing
 - Conversation flow with "tell me more" and "another tip" commands
-- Clean bullet-point formatting for all responses
+- Memory recall - remembers user name and interests
+- Sentiment detection for worried, curious, and frustrated users
+- "Did you mean" suggestions for partial matches
+- Voice greeting on startup
 
 ## How to Run
 
@@ -34,11 +36,12 @@ A cybersecurity chatbot for PROG6221 POE - Part 1 (Console) and Part 2 (GUI).
 2. In Solution Explorer, right-click the `CybersecurityChatbot` project and select **Set as Startup Project**
 3. Press `F5` to run
 
-### Part 2 (GUI)
+##  Part 2 (GUI)
 1. Open `CybersecurityChatbot.slnx` in Visual Studio 2026
-2. In Solution Explorer, right-click the `CybersecurityChatbot` project (with WPF) and select **Set as Startup Project**
-3. Press `F5` to run
+2. Build the project (Ctrl + Shift + B)
+3. Press F5 to run
 4. The GUI window will open automatically
+5. Type your name to start the conversation
 
 ## Example Commands
 | You Type | Bot Response |
