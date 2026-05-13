@@ -1,4 +1,4 @@
-﻿name: .NET Build
+﻿name: .NET Framework WPF Build
 
 on:
   push:
@@ -12,11 +12,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+    
+    - name: Restore NuGet packages
+      run: nuget restore CybersecurityChatbot.sln
+    
+    - name: Build WPF Application
+      run: msbuild CybersecurityChatbot.csproj /p:Configuration=Release /p:OutputPath=bin\Release /t:Build
+      working-directory: ./CybersecurityChatbot
