@@ -14,8 +14,8 @@ namespace CybersecurityChatbot
             InitializeComponent();
             PlayVoiceGreeting();
             bot = new Chatbot();
-            AddToChat("🤖 BOT: Welcome to the Cybersecurity Awareness Bot!", "#00ff9d");
-            AddToChat("🤖 BOT: What's your name?", "#00ff9d");
+            AddToChat("BOT: Welcome to the Cybersecurity Awareness Bot!", "#00ff9d");
+            AddToChat("BOT: What's your name?", "#00ff9d");
         }
 
         private void PlayVoiceGreeting()
@@ -27,7 +27,7 @@ namespace CybersecurityChatbot
             }
             catch (Exception)
             {
-                AddToChat("⚠️ BOT: Voice greeting file not found. Continuing with text only.", "#ff6b6b");
+                AddToChat("BOT: Voice greeting file not found. Continuing with text only.", "#ff6b6b");
             }
         }
 
@@ -51,11 +51,11 @@ namespace CybersecurityChatbot
             if (string.IsNullOrWhiteSpace(userMessage))
                 return;
 
-            AddToChat($"👤 YOU: {userMessage}", "#ffffff");
+            AddToChat($"YOU: {userMessage}", "#ffffff");
             UserInput.Text = "";
 
             string botResponse = ProcessUserInput(userMessage);
-            AddToChat($"🤖 BOT: {botResponse}", "#00ff9d");
+            AddToChat($"BOT: {botResponse}", "#00ff9d");
         }
 
         private string ProcessUserInput(string userInput)
@@ -63,10 +63,11 @@ namespace CybersecurityChatbot
             if (string.IsNullOrEmpty(bot.GetUserName()))
             {
                 bot.SetUserName(userInput);
-                return $"Nice to meet you, {bot.GetUserName()}! I'm here to help you stay safe online. You can ask me about passwords, phishing, safe browsing, scams, privacy, or 2FA.";
+                return $"Nice to meet you, {bot.GetUserName()}! I'm here to help you stay safe online.\n\nYou can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
             }
 
-            return bot.GetResponse(userInput);
+            
+            return bot.GetResponse(userInput, "");
         }
 
         private void AddToChat(string message, string colorHex)
@@ -76,4 +77,3 @@ namespace CybersecurityChatbot
         }
     }
 }
-

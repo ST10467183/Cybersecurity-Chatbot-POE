@@ -9,26 +9,145 @@ namespace CybersecurityChatbot
     internal class Chatbot
     {
         private string userName;
-        private Dictionary<string, string> responses;
+        private Random random = new Random();
+
+        // Password Tips
+        private List<string> passwordTips = new List<string>
+        {
+            "Use at least 12 characters with a mix of uppercase, lowercase, numbers, and symbols.",
+            "Never reuse passwords across different accounts.",
+            "Use a password manager to generate and store strong, unique passwords.",
+            "Avoid using personal information like birthdays, names, or pet names.",
+            "Enable two-factor authentication whenever possible.",
+            "Change your passwords immediately if you suspect any account has been compromised."
+        };
+
+        // Phishing Tips
+        private List<string> phishingTips = new List<string>
+        {
+            "Never click on links in suspicious emails.",
+            "Legitimate companies never ask for your password via email.",
+            "Check the sender's email address carefully.",
+            "Look for spelling mistakes and urgent language like 'Act now!'.",
+            "Type the website URL yourself instead of clicking email links.",
+            "Never download attachments from unknown senders."
+        };
+
+        // Scam Tips
+        private List<string> scamTips = new List<string>
+        {
+            "If something sounds too good to be true, it probably is.",
+            "Never send money to someone you've only met online.",
+            "Legitimate companies won't call you out of the blue for tech support.",
+            "Be wary of calls claiming you owe money to the government.",
+            "Don't click pop-up ads claiming your computer is infected.",
+            "Always verify charity requests before donating."
+        };
+
+        // Privacy Tips
+        private List<string> privacyTips = new List<string>
+        {
+            "Review app permissions regularly.",
+            "Use a VPN on public WiFi networks.",
+            "Be careful what you share on social media.",
+            "Regularly clear your browser cookies and cache.",
+            "Use encrypted messaging apps for sensitive conversations.",
+            "Check if your email has been breached online."
+        };
+
+        // Browsing Tips
+        private List<string> safeBrowsingTips = new List<string>
+        {
+            "Always look for 'https://' in URLs.",
+            "Avoid using public WiFi for banking or shopping.",
+            "Keep your browser and extensions updated.",
+            "Use ad blockers to prevent malicious ads.",
+            "Don't download files from untrusted websites.",
+            "Enable your browser's safe browsing features."
+        };
 
         public Chatbot()
         {
-            responses = new Dictionary<string, string>();
-            InitializeResponses();
         }
 
-        private void InitializeResponses()
+        public string GetResponse(string userInput, string lastTopic)
         {
-            responses.Add("how are you", "I'm doing great! Thanks for asking! I'm fully charged and ready to help you stay safe online!");
-            responses.Add("what is your purpose", "I'm your Cybersecurity Awareness Assistant! My purpose is to educate you about online safety and help you protect yourself from cyber threats like phishing, scams, and weak passwords.");
-            responses.Add("what can i ask", "You can ask me about:\n- Password safety\n- Phishing scams\n- Safe browsing habits\n- General cybersecurity tips\n\nJust type your question and I'll help you out!");
-            responses.Add("password", "PASSWORD SAFETY TIP: Use strong, unique passwords for each account! A strong password should be at least 12 characters and mix uppercase, lowercase, numbers, and symbols. Never reuse passwords across different sites!");
-            responses.Add("phishing", "PHISHING AWARENESS: Phishing is when scammers try to trick you into giving personal information. Never click suspicious links, don't share passwords via email, and always verify the sender's email address!");
-            responses.Add("safe browsing", "SAFE BROWSING TIPS:\n1. Look for 'https://' in URLs\n2. Avoid public WiFi for banking\n3. Keep your browser updated\n4. Don't download files from untrusted sources\n5. Use ad blockers to avoid malicious ads");
-            responses.Add("scam", "SCAM ALERT: Scammers often create urgency to trick you. Remember:\n- Legitimate companies never ask for passwords\n- Too-good-to-be-true offers are usually scams\n- Verify calls by calling back official numbers\n- Never send money to strangers online");
-            responses.Add("privacy", "PRIVACY PROTECTION:\n- Review app permissions regularly\n- Use two-factor authentication when available\n- Be careful what you share on social media\n- Use a VPN on public networks\n- Regularly clear browser cookies");
-            // Commit 4: Added 2FA tip
-            responses.Add("2fa", "TWO-FACTOR AUTHENTICATION: Enable 2FA on all accounts! It adds an extra layer of security by requiring a code from your phone even if someone steals your password.");
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                return "I didn't catch that. Could you please say something?\n\nTry asking about:\n- Password safety\n- Phishing awareness\n- Safe browsing\n- Scam prevention\n- Privacy protection";
+            }
+
+            string lowerInput = userInput.ToLower();
+
+            //  RANDOM tip 
+            if (lowerInput.Contains("password"))
+            {
+                return GetRandomPasswordTip();
+            }
+            if (lowerInput.Contains("phishing"))
+            {
+                return GetRandomPhishingTip();
+            }
+            if (lowerInput.Contains("scam"))
+            {
+                return GetRandomScamTip();
+            }
+            if (lowerInput.Contains("privacy"))
+            {
+                return GetRandomPrivacyTip();
+            }
+            if (lowerInput.Contains("safe browsing") || lowerInput.Contains("browsing"))
+            {
+                return GetRandomSafeBrowsingTip();
+            }
+            if (lowerInput.Contains("2fa") || lowerInput.Contains("two factor"))
+            {
+                return "TWO-FACTOR AUTHENTICATION:\n- Adds an extra layer of security\n- Requires a code from your phone\n- Works even if someone steals your password\n- Available on most major accounts\n- Always enable it when offered";
+            }
+            if (lowerInput.Contains("how are you"))
+            {
+                return "I'm doing great! Thanks for asking! I'm ready to help you stay safe online.";
+            }
+            if (lowerInput.Contains("what is your purpose"))
+            {
+                return "My purpose is to educate you about cybersecurity and help you protect yourself from:\n- Phishing attacks\n- Online scams\n- Weak passwords\n- Privacy breaches\n- Malware and viruses";
+            }
+            if (lowerInput.Contains("what can i ask") || lowerInput.Contains("what can I ask"))
+            {
+                return "You can ask me about:\n- Password safety\n- Phishing awareness\n- Safe browsing habits\n- Scam prevention\n- Privacy protection\n- Two-factor authentication (2FA)\n\nJust type your question and I'll help you out!";
+            }
+
+            return "I didn't quite understand that. Could you rephrase?\n\nTry asking about:\n- Password safety\n- Phishing scams\n- Safe browsing\n- Privacy protection\n- Two-factor authentication";
+        }
+
+        private string GetRandomPasswordTip()
+        {
+            int index = random.Next(passwordTips.Count);
+            return "PASSWORD TIP: " + passwordTips[index];
+        }
+
+        private string GetRandomPhishingTip()
+        {
+            int index = random.Next(phishingTips.Count);
+            return "PHISHING TIP: " + phishingTips[index];
+        }
+
+        private string GetRandomScamTip()
+        {
+            int index = random.Next(scamTips.Count);
+            return "SCAM TIP: " + scamTips[index];
+        }
+
+        private string GetRandomPrivacyTip()
+        {
+            int index = random.Next(privacyTips.Count);
+            return "PRIVACY TIP: " + privacyTips[index];
+        }
+
+        private string GetRandomSafeBrowsingTip()
+        {
+            int index = random.Next(safeBrowsingTips.Count);
+            return "SAFE BROWSING TIP: " + safeBrowsingTips[index];
         }
 
         public void SetUserName(string name)
@@ -39,26 +158,6 @@ namespace CybersecurityChatbot
         public string GetUserName()
         {
             return userName;
-        }
-
-        public string GetResponse(string userInput)
-        {
-            if (string.IsNullOrWhiteSpace(userInput))
-            {
-                return "I didn't catch that. Could you please say something? Try asking about passwords, phishing, or safe browsing!";
-            }
-
-            string lowerInput = userInput.ToLower();
-
-            foreach (KeyValuePair<string, string> response in responses)
-            {
-                if (lowerInput.Contains(response.Key))
-                {
-                    return response.Value;
-                }
-            }
-
-            return "I didn't quite understand that. Could you rephrase? Try asking about:\n- Password safety\n- Phishing scams\n- Safe browsing\n- Privacy protection\n\nOr type 'exit' to leave.";
         }
     }
 }

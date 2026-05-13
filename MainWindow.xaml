@@ -75,7 +75,7 @@
                          FontSize="14" 
                          FontFamily="Segoe UI"
                          Background="#1a1a2e" 
-                         Foreground="#6c3483"
+                         Foreground="White"
                          BorderBrush="#6c3483"
                          BorderThickness="1"
                          KeyDown="UserInput_KeyDown"/>
