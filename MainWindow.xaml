@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Deep Purple ASCII Art Header -->
+        <!--  -->
         <Border Grid.Row="0" Background="#0f3460" Padding="15" Margin="10" CornerRadius="10" BorderBrush="#6c3483" BorderThickness="1">
             <StackPanel>
                 <TextBlock Text="╔════════════════════════════════════════════════════════════════════╗" 
@@ -50,7 +50,7 @@
             </StackPanel>
         </Border>
 
-        <!-- Chat Display Area -->
+        <!-- -->
         <ListBox x:Name="ChatDisplay" 
                  Grid.Row="1" 
                  Margin="10" 
@@ -61,7 +61,7 @@
                  BorderBrush="#0f3460" 
                  BorderThickness="2"/>
 
-        <!-- Input Area -->
+        <!-- -->
         <Border Grid.Row="2" Background="#0f3460" Padding="10" Margin="10" CornerRadius="8">
             <Grid>
                 <Grid.ColumnDefinitions>

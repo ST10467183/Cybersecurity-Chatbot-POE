@@ -1,7 +1,9 @@
-﻿name: Build WPF Project
+﻿name: .NET Framework 4.7.2 Build
 
 on:
   push:
+    branches: [ main, master ]
+  pull_request:
     branches: [ main, master ]
 
 jobs:
@@ -11,17 +13,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
-    
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
-    
+
     - name: Restore NuGet packages
       run: nuget restore CybersecurityChatbot.slnx
-      working-directory: .
-    
-    - name: Build WPF Project
-      run: msbuild CybersecurityChatbot.csproj /p:Configuration=Release /p:Platform="Any CPU"
-      working-directory: .
+
+    - name: Build the WPF application
+      run: msbuild CybersecurityChatbot.csproj /p:Configuration=Release /p:TargetFrameworkVersion=v4.7.2
