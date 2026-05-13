@@ -65,3 +65,10 @@ ST10467183
 PROG6221 - Programming 2A
 
 0b324a8dee510e9da13dbd3b1eef54836b0bb5f5
+## References
+
+Pieterse, H. 2021. The Cyber Threat Landscape in South Africa: A 10-Year Review. The African Journal of Information and Communication, 28(28). doi: https://doi.org/10.23962/10539/32213 (Accessed 12 May 2026).
+
+Microsoft. 2026. WPF Documentation. Available at: https://docs.microsoft.com/en-us/dotnet/desktop/wpf/ (Accessed 12 May 2026).
+
+GitHub. 2026. GitHub Actions Documentation. Available at: https://docs.github.com/en/actions (Accessed 12 May 2026).
