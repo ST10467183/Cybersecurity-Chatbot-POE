@@ -1,9 +1,7 @@
-﻿name: .NET Framework WPF Build
+﻿name: Build WPF Project
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
 
 jobs:
@@ -11,17 +9,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
     
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.3
+      uses: microsoft/setup-msbuild@v2
     
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1
+      uses: NuGet/setup-nuget@v2
     
     - name: Restore NuGet packages
-      run: nuget restore CybersecurityChatbot.sln
+      run: nuget restore CybersecurityChatbot.slnx
+      working-directory: .
     
-    - name: Build WPF Application
-      run: msbuild CybersecurityChatbot.csproj /p:Configuration=Release /p:OutputPath=bin\Release /t:Build
-      working-directory: ./CybersecurityChatbot
+    - name: Build WPF Project
+      run: msbuild CybersecurityChatbot.csproj /p:Configuration=Release /p:Platform="Any CPU"
+      working-directory: .
