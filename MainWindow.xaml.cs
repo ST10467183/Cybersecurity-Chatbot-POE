@@ -11,6 +11,7 @@ namespace CybersecurityChatbot
         private Chatbot bot;
         private DatabaseHelper dbHelper = new DatabaseHelper();
         private Quiz quiz;
+        private ActivityLog activityLog = new ActivityLog();
 
         public MainWindow()
         {
@@ -121,6 +122,18 @@ namespace CybersecurityChatbot
                 return "I understand you want to start the quiz. Go to the Quiz tab and click Start Quiz.";
             }
 
+            // Activity Log
+            if (lower.Contains("show log") || lower.Contains("activity log") || lower.Contains("what have you done") || lower.Contains("history"))
+            {
+                return GetActivityLogDisplay();
+            }
+
+            // Show More
+            if (lower.Contains("show more") || lower.Contains("full log") || lower.Contains("all entries"))
+            {
+                return GetFullActivityLog();
+            }
+
             // Help
             if (lower.Contains("help") || lower.Contains("what can you do") || lower.Contains("what can i ask"))
             {
@@ -130,11 +143,62 @@ namespace CybersecurityChatbot
             return "";
         }
 
+        // ===== ACTIVITY LOG =====
+
+        private string GetActivityLogDisplay()
+        {
+            var entries = activityLog.GetLastEntries(10);
+            if (entries.Count == 0)
+            {
+                return "No activity logged yet. Start using the bot to see actions here!";
+            }
+
+            string display = "Recent activity (last 10 actions):\n";
+            int count = 1;
+            foreach (var entry in entries)
+            {
+                display += $"{count}. {entry}\n";
+                count++;
+            }
+
+            int total = activityLog.GetEntryCount();
+            if (total > 10)
+            {
+                display += $"\nTotal entries: {total}. Type 'Show more' to see full history.";
+            }
+            else
+            {
+                display += $"\nTotal entries: {total}.";
+            }
+
+            return display;
+        }
+
+        private string GetFullActivityLog()
+        {
+            var allEntries = activityLog.GetAllEntries();
+            if (allEntries.Count == 0)
+            {
+                return "No activity logged yet.";
+            }
+
+            string display = "Full activity log:\n";
+            int count = 1;
+            foreach (var entry in allEntries)
+            {
+                display += $"{count}. {entry}\n";
+                count++;
+            }
+            display += $"\nTotal entries: {allEntries.Count}.";
+            return display;
+        }
+
         // ===== QUIZ =====
 
         private void StartQuizButton_Click(object sender, RoutedEventArgs e)
         {
             quiz = new Quiz();
+            activityLog.AddEntry("Quiz started");
             ShowQuestion();
             StartQuizButton.Content = "Restart Quiz";
         }
@@ -189,6 +253,10 @@ namespace CybersecurityChatbot
             string explanation = currentQuestion.Explanation;
 
             bool isCorrect = quiz.AnswerQuestion(selectedIndex);
+
+            // Log quiz answer
+            string result = isCorrect ? "Correct" : "Incorrect";
+            activityLog.AddEntry($"Quiz answer: {result} - {questionText}");
 
             if (isCorrect)
             {
@@ -249,6 +317,7 @@ namespace CybersecurityChatbot
             }
 
             dbHelper.AddTask(title, description, reminderDate);
+            activityLog.AddEntry($"Task added: {title}");
             AddToChat($"Task added: {title}", "#00ff9d");
             RefreshTaskList();
             TaskTitle.Text = "";
@@ -272,6 +341,7 @@ namespace CybersecurityChatbot
             var button = sender as Button;
             int id = (int)button.Tag;
             dbHelper.CompleteTask(id);
+            activityLog.AddEntry($"Task completed: ID {id}");
             AddToChat($"Task marked as complete.", "#00ff9d");
             RefreshTaskList();
         }
@@ -281,6 +351,7 @@ namespace CybersecurityChatbot
             var button = sender as Button;
             int id = (int)button.Tag;
             dbHelper.DeleteTask(id);
+            activityLog.AddEntry($"Task deleted: ID {id}");
             AddToChat($"Task deleted.", "#ff6b6b");
             RefreshTaskList();
         }

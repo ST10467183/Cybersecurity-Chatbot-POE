@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityLog.cs" />
     <Compile Include="Chatbot.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
