@@ -131,8 +131,8 @@ namespace CybersecurityChatbot
                 return;
             }
 
-            var question = quiz.GetCurrentQuestion();
-            if (question == null)
+            var currentQuestion = quiz.GetCurrentQuestion();
+            if (currentQuestion == null)
             {
                 ShowQuizResult();
                 return;
@@ -141,18 +141,21 @@ namespace CybersecurityChatbot
             var button = sender as Button;
             int selectedIndex = int.Parse(button.Tag.ToString());
 
+            // Store data BEFORE answering
+            string questionText = currentQuestion.Text;
+            string correctAnswer = currentQuestion.Options[currentQuestion.CorrectIndex];
+            string explanation = currentQuestion.Explanation;
+
             bool isCorrect = quiz.AnswerQuestion(selectedIndex);
-            question = quiz.GetCurrentQuestion();
 
             if (isCorrect)
             {
-                QuizFeedbackDisplay.Text = $"Correct! {question.Explanation}";
+                QuizFeedbackDisplay.Text = $"Correct! {explanation}";
                 QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.LightGreen;
             }
             else
             {
-                string correctAnswer = question.Options[question.CorrectIndex];
-                QuizFeedbackDisplay.Text = $"Incorrect. The correct answer was: {correctAnswer}\n{question.Explanation}";
+                QuizFeedbackDisplay.Text = $"Incorrect. The correct answer was: {correctAnswer}\n{explanation}";
                 QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.LightCoral;
             }
 
