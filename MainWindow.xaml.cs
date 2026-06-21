@@ -64,12 +64,21 @@ namespace CybersecurityChatbot
 
         private string ProcessUserInput(string userInput)
         {
+            // Check if user is giving their name
             if (string.IsNullOrEmpty(bot.GetUserName()))
             {
                 bot.SetUserName(userInput);
                 return $"Nice to meet you, {bot.GetUserName()}! I'm here to help you stay safe online.\n\nYou can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
             }
 
+            // Check NLP first
+            string nlpResponse = ProcessNLP(userInput);
+            if (!string.IsNullOrEmpty(nlpResponse))
+            {
+                return nlpResponse;
+            }
+
+            // Fall back to normal chatbot response
             return bot.GetResponse(userInput, "");
         }
 
@@ -86,6 +95,39 @@ namespace CybersecurityChatbot
             {
                 AddToChat($"REMINDER: Task '{task.Title}' is due today! - {task.Description}", "#ff6b6b");
             }
+        }
+
+        // ===== NLP =====
+
+        private string ProcessNLP(string userInput)
+        {
+            string lower = userInput.ToLower();
+
+            // Add Task
+            if (lower.Contains("add task") || lower.Contains("create task") || lower.Contains("new task") || lower.Contains("reminder"))
+            {
+                return "I understand you want to add a task. Go to the Tasks tab to add one.";
+            }
+
+            // View Tasks
+            if (lower.Contains("view tasks") || lower.Contains("show tasks") || lower.Contains("list tasks") || lower.Contains("my tasks"))
+            {
+                return "I understand you want to view tasks. Go to the Tasks tab and click Refresh.";
+            }
+
+            // Start Quiz
+            if (lower.Contains("start quiz") || lower.Contains("play quiz") || lower.Contains("take quiz") || lower.Contains("begin quiz") || lower.Contains("test me"))
+            {
+                return "I understand you want to start the quiz. Go to the Quiz tab and click Start Quiz.";
+            }
+
+            // Help
+            if (lower.Contains("help") || lower.Contains("what can you do") || lower.Contains("what can i ask"))
+            {
+                return "You can:\n- Ask about cybersecurity topics (password, phishing, scams, privacy, safe browsing, 2FA)\n- Add tasks (Tasks tab)\n- Take the quiz (Quiz tab)\n- View activity log";
+            }
+
+            return "";
         }
 
         // ===== QUIZ =====
