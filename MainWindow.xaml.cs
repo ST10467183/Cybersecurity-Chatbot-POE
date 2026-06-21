@@ -10,6 +10,7 @@ namespace CybersecurityChatbot
     {
         private Chatbot bot;
         private DatabaseHelper dbHelper = new DatabaseHelper();
+        private Quiz quiz;
 
         public MainWindow()
         {
@@ -87,7 +88,108 @@ namespace CybersecurityChatbot
             }
         }
 
-        // ===== TASK ASSISTANT METHODS =====
+        // ===== QUIZ =====
+
+        private void StartQuizButton_Click(object sender, RoutedEventArgs e)
+        {
+            quiz = new Quiz();
+            ShowQuestion();
+            StartQuizButton.Content = "Restart Quiz";
+        }
+
+        private void ShowQuestion()
+        {
+            var question = quiz.GetCurrentQuestion();
+            if (question == null)
+            {
+                ShowQuizResult();
+                return;
+            }
+
+            QuizQuestionDisplay.Text = question.Text;
+            QuizProgressDisplay.Text = $"{quiz.GetScore() + 1} / {quiz.GetTotalQuestions()}";
+
+            QuizOption1.Content = $"A) {question.Options[0]}";
+            QuizOption2.Content = $"B) {question.Options[1]}";
+            QuizOption3.Content = $"C) {question.Options[2]}";
+            QuizOption4.Content = $"D) {question.Options[3]}";
+
+            QuizFeedbackDisplay.Text = "Select an answer to see feedback";
+            QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.LightGray;
+
+            QuizOption1.IsEnabled = true;
+            QuizOption2.IsEnabled = true;
+            QuizOption3.IsEnabled = true;
+            QuizOption4.IsEnabled = true;
+        }
+
+        private void QuizOption_Click(object sender, RoutedEventArgs e)
+        {
+            if (quiz == null)
+            {
+                QuizFeedbackDisplay.Text = "Please start the quiz first!";
+                return;
+            }
+
+            var question = quiz.GetCurrentQuestion();
+            if (question == null)
+            {
+                ShowQuizResult();
+                return;
+            }
+
+            var button = sender as Button;
+            int selectedIndex = int.Parse(button.Tag.ToString());
+
+            bool isCorrect = quiz.AnswerQuestion(selectedIndex);
+            question = quiz.GetCurrentQuestion();
+
+            if (isCorrect)
+            {
+                QuizFeedbackDisplay.Text = $"Correct! {question.Explanation}";
+                QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.LightGreen;
+            }
+            else
+            {
+                string correctAnswer = question.Options[question.CorrectIndex];
+                QuizFeedbackDisplay.Text = $"Incorrect. The correct answer was: {correctAnswer}\n{question.Explanation}";
+                QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.LightCoral;
+            }
+
+            QuizOption1.IsEnabled = false;
+            QuizOption2.IsEnabled = false;
+            QuizOption3.IsEnabled = false;
+            QuizOption4.IsEnabled = false;
+
+            var timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Tick += (s, args) =>
+            {
+                timer.Stop();
+                ShowQuestion();
+            };
+            timer.Start();
+        }
+
+        private void ShowQuizResult()
+        {
+            string result = quiz.GetFinalMessage();
+            QuizQuestionDisplay.Text = "Quiz Complete!";
+            QuizProgressDisplay.Text = $"Score: {quiz.GetScore()} / {quiz.GetTotalQuestions()}";
+            QuizFeedbackDisplay.Text = result;
+            QuizFeedbackDisplay.Foreground = System.Windows.Media.Brushes.Gold;
+
+            QuizOption1.Content = "";
+            QuizOption2.Content = "";
+            QuizOption3.Content = "";
+            QuizOption4.Content = "";
+            QuizOption1.IsEnabled = false;
+            QuizOption2.IsEnabled = false;
+            QuizOption3.IsEnabled = false;
+            QuizOption4.IsEnabled = false;
+        }
+
+        // ===== TASKS =====
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {

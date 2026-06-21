@@ -8,7 +8,6 @@
         Background="#1a1a2e">
 
     <Window.Resources>
-        <!-- Fix for TextBox -->
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="#1a1a2e"/>
             <Setter Property="Foreground" Value="White"/>
@@ -17,7 +16,6 @@
             <Setter Property="CaretBrush" Value="White"/>
         </Style>
 
-        <!-- Fix for DatePicker -->
         <Style TargetType="DatePicker">
             <Setter Property="Background" Value="#1a1a2e"/>
             <Setter Property="Foreground" Value="White"/>
@@ -25,7 +23,6 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- Fix for DatePickerTextBox inside DatePicker -->
         <Style TargetType="DatePickerTextBox">
             <Setter Property="Background" Value="#1a1a2e"/>
             <Setter Property="Foreground" Value="White"/>
@@ -34,7 +31,6 @@
             <Setter Property="CaretBrush" Value="White"/>
         </Style>
 
-        <!-- Fix for ListBox -->
         <Style TargetType="ListBox">
             <Setter Property="Background" Value="#0a0a1a"/>
             <Setter Property="Foreground" Value="White"/>
@@ -148,7 +144,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Add Task Section -->
+                    <!-- Add Task -->
                     <Border Grid.Row="0" Background="#0f3460" Padding="15" Margin="5" CornerRadius="8" BorderBrush="#6c3483" BorderThickness="1">
                         <StackPanel>
                             <TextBlock Text="Add New Task" FontWeight="Bold" Foreground="#6c3483" FontSize="16" Margin="0,0,0,10"/>
@@ -186,7 +182,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Task List Section -->
+                    <!-- Task List -->
                     <Border Grid.Row="1" Background="#0f3460" Padding="15" Margin="5" CornerRadius="8" BorderBrush="#6c3483" BorderThickness="1">
                         <StackPanel>
                             <Grid>
@@ -226,6 +222,38 @@
                             </ListBox>
                         </StackPanel>
                     </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Quiz Tab -->
+            <TabItem Header="Quiz" Foreground="#6c3483" FontWeight="Bold">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#0f3460" Padding="15" Margin="5" CornerRadius="8" BorderBrush="#6c3483" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock x:Name="QuizQuestionDisplay" Text="Click Start Quiz to begin!" FontSize="16" Foreground="White" TextWrapping="Wrap" FontWeight="Bold"/>
+                            <TextBlock x:Name="QuizProgressDisplay" Text="0 / 0" Foreground="#d2b4de" FontSize="12" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Grid.Row="1" Margin="5">
+                        <Button x:Name="QuizOption1" Content="A" Height="35" Margin="5" Background="#1a1a2e" Foreground="White" BorderBrush="#6c3483" BorderThickness="1" Click="QuizOption_Click" Tag="0"/>
+                        <Button x:Name="QuizOption2" Content="B" Height="35" Margin="5" Background="#1a1a2e" Foreground="White" BorderBrush="#6c3483" BorderThickness="1" Click="QuizOption_Click" Tag="1"/>
+                        <Button x:Name="QuizOption3" Content="C" Height="35" Margin="5" Background="#1a1a2e" Foreground="White" BorderBrush="#6c3483" BorderThickness="1" Click="QuizOption_Click" Tag="2"/>
+                        <Button x:Name="QuizOption4" Content="D" Height="35" Margin="5" Background="#1a1a2e" Foreground="White" BorderBrush="#6c3483" BorderThickness="1" Click="QuizOption_Click" Tag="3"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="2" Background="#0f3460" Padding="10" Margin="5" CornerRadius="8" BorderBrush="#6c3483" BorderThickness="1">
+                        <TextBlock x:Name="QuizFeedbackDisplay" Text="Select an answer to see feedback" Foreground="#d2b4de" FontSize="14" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <Button x:Name="StartQuizButton" Grid.Row="3" Content="Start Quiz" Height="45" Margin="5" Background="#6c3483" Foreground="White" FontWeight="Bold" FontSize="16" Click="StartQuizButton_Click" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
         </TabControl>
