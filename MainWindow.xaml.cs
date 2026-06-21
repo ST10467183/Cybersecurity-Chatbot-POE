@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Media;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CybersecurityChatbot
@@ -8,6 +9,7 @@ namespace CybersecurityChatbot
     public partial class MainWindow : Window
     {
         private Chatbot bot;
+        private DatabaseHelper dbHelper = new DatabaseHelper();
 
         public MainWindow()
         {
@@ -16,6 +18,7 @@ namespace CybersecurityChatbot
             bot = new Chatbot();
             AddToChat("BOT: Welcome to the Cybersecurity Awareness Bot!", "#00ff9d");
             AddToChat("BOT: What's your name?", "#00ff9d");
+            CheckReminders();
         }
 
         private void PlayVoiceGreeting()
@@ -66,7 +69,6 @@ namespace CybersecurityChatbot
                 return $"Nice to meet you, {bot.GetUserName()}! I'm here to help you stay safe online.\n\nYou can ask me about:\n- Passwords\n- Phishing\n- Safe browsing\n- Scams\n- Privacy\n- Two-factor authentication (2FA)";
             }
 
-            
             return bot.GetResponse(userInput, "");
         }
 
@@ -74,6 +76,66 @@ namespace CybersecurityChatbot
         {
             ChatDisplay.Items.Add(message);
             ChatDisplay.ScrollIntoView(ChatDisplay.Items[ChatDisplay.Items.Count - 1]);
+        }
+
+        private void CheckReminders()
+        {
+            var dueTasks = dbHelper.GetTasksDueToday();
+            foreach (var task in dueTasks)
+            {
+                AddToChat($"REMINDER: Task '{task.Title}' is due today! - {task.Description}", "#ff6b6b");
+            }
+        }
+
+        // ===== TASK ASSISTANT METHODS =====
+
+        private void AddTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            string title = TaskTitle.Text.Trim();
+            string description = TaskDescription.Text.Trim();
+            DateTime? reminderDate = TaskReminderDate.SelectedDate;
+
+            if (string.IsNullOrEmpty(title))
+            {
+                AddToChat("Please enter a task title.", "#ff6b6b");
+                return;
+            }
+
+            dbHelper.AddTask(title, description, reminderDate);
+            AddToChat($"Task added: {title}", "#00ff9d");
+            RefreshTaskList();
+            TaskTitle.Text = "";
+            TaskDescription.Text = "";
+            TaskReminderDate.SelectedDate = null;
+        }
+
+        private void RefreshTaskList()
+        {
+            var tasks = dbHelper.GetTasks();
+            TaskListBox.ItemsSource = tasks;
+        }
+
+        private void RefreshTasksButton_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshTaskList();
+        }
+
+        private void CompleteTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            int id = (int)button.Tag;
+            dbHelper.CompleteTask(id);
+            AddToChat($"Task marked as complete.", "#00ff9d");
+            RefreshTaskList();
+        }
+
+        private void DeleteTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            int id = (int)button.Tag;
+            dbHelper.DeleteTask(id);
+            AddToChat($"Task deleted.", "#ff6b6b");
+            RefreshTaskList();
         }
     }
 }

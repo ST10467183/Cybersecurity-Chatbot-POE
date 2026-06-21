@@ -16,7 +16,7 @@ namespace CybersecurityChatbot
 
         // Flow tracking
         private string lastTopic = "";
-        private int lastTipIndex = -1;
+        //private int lastTipIndex = -1;
 
         // Sentiment
         private List<string> worriedWords = new List<string> { "worried", "scared", "nervous", "anxious", "concerned", "afraid" };
