@@ -1,4 +1,5 @@
 
+
 ﻿# Cybersecurity Awareness Chatbot
 
 A cybersecurity chatbot for PROG6221 POE - Part 1 (Console) and Part 2 (GUI).
@@ -72,3 +73,5 @@ Pieterse, H. 2021. The Cyber Threat Landscape in South Africa: A 10-Year Review.
 Microsoft. 2026. WPF Documentation. Available at: https://docs.microsoft.com/en-us/dotnet/desktop/wpf/ (Accessed 12 May 2026).
 
 GitHub. 2026. GitHub Actions Documentation. Available at: https://docs.github.com/en/actions (Accessed 12 May 2026).
+=======
+
